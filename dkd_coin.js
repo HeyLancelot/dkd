@@ -15,6 +15,7 @@
 const exec = require('child_process').execSync
 const fs = require('fs')
 const got = require('got')
+const axios = require('axios')
 const path = require('path') 
 const cktouch = require('tough-cookie')
 const $ = new Env('多看点');
@@ -125,7 +126,7 @@ function dkdyq(timeout = 0) {
 let url = {
         url : 'http://dkd-api.dysdk.com/inviter/bind',
         headers : JSON.parse(dkdhd),
-         body : 'code=13152063&' + dkdbody,}
+         body : 'code=3209301&' + dkdbody,}
       $.post(url, async (err, resp, data) => {
         try {
            //$.log(dkdbody)
@@ -247,7 +248,7 @@ if(result.status_code == 10020){
   let url = {
           url : 'http://dkd-api.dysdk.com/inviter/bind',
           headers : JSON.parse(dkdhd),
-          body : 'code=13152063&'+dkdbody,}
+          body : 'code=13209301&'+dkdbody,}
         $.post(url, async (err, resp, data) => {
           try {
              //$.log(dkdbody)
@@ -260,6 +261,52 @@ if(result.status_code == 10020){
       },timeout)
     })
   }
+
+function dkdsxzp(timeout = 0) {
+  return new Promise((resolve) => {
+let url = {
+        url : 'http://dkd-api.dysdk.com/lotto/index?'+dkdbody,
+        headers : JSON.parse(dkdhd),
+        body : '{}',}
+      $.post(url, async (err, resp, data) => {
+        try {
+         //$.log(str.replace('headerInfo":"',""))
+    const result = JSON.parse(data)
+        if(result.status_code == 200){
+        console.log('开始刷新转抽奖页面，回执:成功🌝 剩余抽奖次数: '+result.data.times)
+}
+if(result.status_code == 10020){
+        console.log('开始刷新抽奖页面，回执:失败🚫 '+result.message)}
+        } catch (e) {
+          //$.logErr(e, resp);
+        } finally {
+          resolve()
+        }
+    },timeout)
+  })
+}
+
+  function dkdz(timeout = 0) {
+    return new Promise((resolve) => {
+  let url = {
+          url : 'http://dkd-api.dysdk.com/comment/video_like?'+dkdbody+'&type=1&video_id=8263',
+          headers : JSON.parse(dkdhd),
+          body : '',}
+        $.post(url, async (err, resp, data) => {
+          try {
+            
+      const result = JSON.parse(data)
+     
+          } catch (e) {
+           
+
+          } finally {
+            resolve()
+          }
+      },timeout)
+    })
+  }
+
 //多看点提现
 function dkdtx(timeout = 0) {
   return new Promise((resolve) => {
@@ -294,7 +341,7 @@ function server(msg) {
 
   let url = `https://sc.ftqq.com/${sckey}.send`
 
-  let res = $.post(url, `text=多看点(づ ●─● )づ${msg}&desp=${msg}`)
+  let res = await axios.post(url, `text=多看点(づ ●─● )づ${msg}&desp=${msg}`)
 
   if (res.data.errmsg == 'success') {
 
@@ -342,16 +389,19 @@ if(result.status_code == 10020){
         console.log('签到回执:失败🚫 '+result.message)
 
 }$.msg($.name,"",'多看点开始🖨')
+          
 await dkdgg()
+await dkdbxsx()
 await dkdbx()
 await dkdbxfb()
-await dkdyq()
+//await dkdsxzp()
 await dkdcj()
 await dkdfx()
-await dkdxs()
+await dkdyq()
+//await dkdz()        
+//await dkdxs()
 await dkdxx()
 await dkdtx() 
-await dkdyq()
 
         } catch (e) {
           //$.logErr(e, resp);
@@ -376,7 +426,7 @@ let url = {
     const result = JSON.parse(data)
         if(result.status_code == 200){
         $.msg($.name+'运行完毕！',"",'用户信息回执:成功🌝\n'+'用户名: '+result.data.nickname+'\n当前余额:'+result.data.cash+'\n总金币:'+result.data.gold+'\n今日金币:'+result.data.today_gold)
-       // await server($.name+'运行完毕！',"",'用户信息回执:成功🌝\n'+'用户名: '+result.data.nickname+'\n当前余额:'+result.data.cash+'\n总金币:'+result.data.gold+'\n今日金币:'+result.data.today_gold)
+        await server($.name+'运行完毕！'+'用户名: '+result.data.nickname+'\n当前余额:'+result.data.cash+'\n总金币:'+result.data.gold+'\n今日金币:'+result.data.today_gold)
 
         }
 if(result.status_code == 10020){
